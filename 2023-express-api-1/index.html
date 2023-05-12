@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Express Api - Part 1</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script
+      src="https://kit.fontawesome.com/f236940be2.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <div id="slideshow"></div>
-    <button id="prev">Previous</button>
-    <button id="next">Next</button>
-
-    <script src="script.js"></script>
+    <div id="slideshow">
+      <button id="prev"><i class="fas fa-arrow-left"></i></button>
+      <div id="content"></div>
+      <button id="next"><i class="fas fa-arrow-right"></i></button>
+    </div>
+    <script src="index.js"></script>
   </body>
 </html>

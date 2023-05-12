@@ -1,19 +1,22 @@
 // Array of blog content objects
 let blogContent = [
   {
-    title: "Title 1",
-    content: "Content 1",
+    title: "Building an express api",
+    content: "2023 edition part 1",
+    class: "title-slide",
   },
   {
     title: "Title 2",
     content: "Content 2",
+    class: "slide",
   },
 ];
 
 let currentSlide = 0;
 
 window.onload = function () {
-  document.getElementById("slideshow").innerHTML = generateSlideHTML(
+  console.log(blogContent[currentSlide]);
+  document.getElementById("content").innerHTML = generateSlideHTML(
     blogContent[currentSlide]
   );
 
@@ -27,16 +30,40 @@ window.onload = function () {
 };
 
 function generateSlideHTML(slideData) {
-  return "<h1>" + slideData.title + "</h1><p>" + slideData.content + "</p>";
+  return (
+    `<div class="${slideData.class}">` +
+    "<h1>" +
+    slideData.title +
+    "</h1><p>" +
+    slideData.content +
+    "</p></div>"
+  );
 }
 
 function changeSlide(direction) {
+  let content = document.getElementById("content");
+  let oldClass = blogContent[currentSlide].class;
+
+  if (direction === 1) {
+    content.className = oldClass + " slide-out-left";
+  } else {
+    content.className = oldClass + " slide-out-right";
+  }
+
   currentSlide += direction;
 
   if (currentSlide < 0) currentSlide = blogContent.length - 1;
   if (currentSlide >= blogContent.length) currentSlide = 0;
 
-  document.getElementById("slideshow").innerHTML = generateSlideHTML(
-    blogContent[currentSlide]
-  );
+  setTimeout(() => {
+    let newClass = blogContent[currentSlide].class;
+    let newContentHTML = generateSlideHTML(blogContent[currentSlide]);
+
+    content.innerHTML = newContentHTML;
+    if (direction === 1) {
+      content.className = newClass + " slide-in-right";
+    } else {
+      content.className = newClass + " slide-in-left";
+    }
+  }, 250); // Wait for the 'slide out' animation to finish
 }
