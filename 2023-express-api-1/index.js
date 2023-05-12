@@ -9,42 +9,21 @@ let blogContent = [
     class: "title-slide",
   },
   {
-    title: "Title 2",
+    title: "Getting Started",
     content: [
-      { type: "text", content: "Content 2" },
+      {
+        type: "text",
+        content: `
+        In light of the frequent updates to TypeScript, JavaScript, Node.js, and a myriad of other tools, I thought it would be useful to walk through the current best practices for implementing a RESTful API in Node.js with Express and TypeScript. As we progress, I'll aim to explain the steps succinctly and clearly.
+
+        The first step in our journey is to set up the project. For this task, I'll be using Yarn as my package manager, primarily because it's what I've been using in my latest projects. However, if you're more familiar with npm or pnpm, feel free to use those instead - the commands should be practically identical. Let's get started by running the following commands in your project's root directory:`,
+      },
       {
         type: "code",
         content: `
-        import express, { Express } from "express";
-import dotenv from "dotenv";
-import { AppConfig } from "./lib/types/types";
-
-export class App {
-  private app: Express;
-  constructor(config: AppConfig) {
-    dotenv.config();
-    this.app = express();
-    if (config.port) {
-      this.app.set("port", config.port);
-    }
-  }
-
-  public getExpressApp(): Express {
-    return this.app;
-  }
-}
-
-(() => {
-  dotenv.config();
-  if (!process.env.DEV_PORT) {
-    throw new Error("Missing environment variables");
-  }
-  const app = new App({ port: "3000" });
-  app.getExpressApp().listen(() => {
-    console.log("Listening on port " + app.getExpressApp().get("port"));
-  });
-})();
-
+        yarn init
+yarn add --dev typescript
+npx eslint --init
       `,
       },
     ],
@@ -52,42 +31,51 @@ export class App {
     class: "even-slide",
   },
   {
-    title: "Title 3",
+    title: "Setting up Linting",
     content: [
-      { type: "text", content: "Content 2" },
+      {
+        type: "text",
+        content: `
+      In this guide, we will set up linting by adding the following configuration to an .eslintrc.js file:
+
+      The module.exports object is a special construct in Node.js, which exports the configuration for ESLint.
+
+The env key defines the environments your code will run in. These environments, such as browser or Node.js, bring with them certain pre-defined global variables. For example, es2021: true signifies that ES2021 global variables and syntax should be recognized.
+
+The extends key allows us to extend a base configuration file or shareable configuration. In this case, it's extending "eslint:recommended", which includes ESLint's recommended rules, and "plugin:@typescript-eslint/recommended", which provides a recommended set of rules for TypeScript.
+
+The parser key tells ESLint to use the "@typescript-eslint/parser", which converts TypeScript into an Abstract Syntax Tree (AST) that ESLint can understand.
+
+The root: true key indicates that this is the root configuration file, and ESLint should not look further up the directory tree for any other configuration files.
+
+The ignorePatterns key is an array of file patterns that ESLint should ignore during linting.
+
+Finally, the plugins and rules keys specify the ESLint plugins to use and the custom rules to apply, respectively. In this case, we are using the "@typescript-eslint" plugin and have no custom rules defined.
+      
+      `,
+      },
       {
         type: "code",
         content: `
-            export class App {
-              private app: Express;
-              constructor() {
-                this.app = express();
-                this.setupApiRoutes();
-            }
-            
-              public getExpressApp(): Express {
-                return this.app;
-              }
-            
-              private setupApiRoutes() {
-                const apiRouter = Router();
-            
-                apiRouter.use("/users", (req: Request, res: Response) => {
-                  console.log("users");
-                  res.send("Success");
-                });
-            
-                return apiRouter;
-              }
-            
-              public start(port: string) {
-                this.app.listen(port, () => {
-                  console.log(
-                    colors.BgCyan + "Server is running on port " + port + colors.Reset
-                  );
-                });
-              }
-            }
+        module.exports = {
+          env: {
+            browser: true,
+            es2021: true,
+            node: true,
+            jest: true,
+          },
+          extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+          overrides: [],
+          parser: "@typescript-eslint/parser",
+          parserOptions: {
+            ecmaVersion: "latest",
+          },
+          root: true,
+          ignorePatterns: [".eslintrc.js", ".js"],
+          plugins: ["@typescript-eslint"],
+          rules: {},
+        };
+        
           `,
       },
     ],
@@ -192,7 +180,14 @@ class HTMLGenerator {
   generateTextContent(text) {
     let item = this.createHTMLElement("div");
     this.setClass(item, "text-content");
-    this.setTextContent(item, text);
+
+    let lines = text.split("\n").filter((line) => line.trim() !== "");
+    for (let line of lines) {
+      let p = this.createHTMLElement("p");
+      this.setTextContent(p, line);
+      this.appendChild(item, p);
+    }
+
     return item;
   }
 

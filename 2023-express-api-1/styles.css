@@ -89,6 +89,7 @@ body {
   height: 100%;
   width: 100%;
   flex-direction: column;
+  font-size: 1.5rem;
 }
 
 .container {
@@ -104,6 +105,7 @@ body {
 
 .even-slide .container {
   flex-direction: row-reverse;
+  justify-content: space-between;
 }
 
 .odd-slide .container {
@@ -111,6 +113,13 @@ body {
 }
 
 .even-slide .text-content {
+  max-width: 45%;
+  width: 45%;
+  height: fit;
+  text-align: center;
+}
+.odd-slide .text-content {
+  max-width: 45%;
   width: 45%;
   height: fit;
   text-align: center;
