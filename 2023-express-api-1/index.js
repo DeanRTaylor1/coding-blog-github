@@ -25,6 +25,7 @@ let blogContent = [
 yarn add --dev typescript
 npx eslint --init
       `,
+        language: "bash",
       },
     ],
     image: "",
@@ -77,6 +78,7 @@ Finally, the plugins and rules keys specify the ESLint plugins to use and the cu
         };
         
           `,
+        language: "javascript",
       },
     ],
     image: "",
@@ -123,7 +125,10 @@ function generateSlideHTML(slideData) {
       let item = generator.generateTextContent(slideData.content[i].content);
       generator.appendChild(contentContainer, item);
     } else if (slideData.content[i].type === "code") {
-      let item = generator.generateCodeContent(slideData.content[i].content);
+      let item = generator.generateCodeContent(
+        slideData.content[i].content,
+        slideData.content[i].language
+      );
       generator.appendChild(contentContainer, item);
     }
   }
@@ -191,7 +196,8 @@ class HTMLGenerator {
     return item;
   }
 
-  generateCodeContent(code) {
+  generateCodeContent(code, language) {
+    console.log(code, language);
     let item = this.createHTMLElement("div");
     this.setClass(item, "embossed-container");
     let windowControls = this.createWindowControls();
@@ -199,7 +205,7 @@ class HTMLGenerator {
 
     let pre = this.createHTMLElement("pre");
     let codeElement = this.createHTMLElement("code");
-    this.setClass(codeElement, "language-typescript");
+    this.setClass(codeElement, `language-${language}`);
     this.setTextContent(codeElement, code);
 
     this.appendChild(pre, codeElement);
